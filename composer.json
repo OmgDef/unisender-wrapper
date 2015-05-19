@@ -1,0 +1,21 @@
+{
+    "name": "omgdef/unisender-wrapper",
+    "description": "Unisender API wrapper",
+    "type": "library",
+    "keywords": ["extension"],
+    "license": "BSD-4-Clause",
+    "authors": [
+        {
+            "name": "OmgDef",
+            "email": "omgdef@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "omgdef\\unisender\\": ""
+        }
+    }
+}
