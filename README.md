@@ -21,6 +21,19 @@ or add
 
 to the require section of your `composer.json` file.
 
+Properties
+------------
+
+Property | Description
+----------|------------
+apiKey | Your API key
+senderPhone | Sender's phone number
+senderName | Sender's name
+senderEmail | Sender's email
+testMode | Enable test mode
+encoding | Encoding (Default: UTF-8)
+timeout | Connection timeout (Default: 10)
+retryCount | The number of connection attempts (Default: 0)
 
 Usage
 -----
