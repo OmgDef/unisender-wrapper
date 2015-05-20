@@ -26,10 +26,6 @@ class UniSenderWrapper
      */
     public $testMode = false;
     /**
-     * @var bool enable compression
-     */
-    public $compression = false;
-    /**
      * @var string
      */
     public $encoding = 'UTF8';
@@ -84,12 +80,7 @@ class UniSenderWrapper
         }
 
         $params['api_key'] = $this->apiKey;
-        $body = http_build_query($params);
-
-        if ($this->compression) {
-            $body = bzcompress($body);
-            $getParams['request_compression'] = 'bzip2';
-        }
+        $body = http_build_query($params);Re
 
         $getParams = http_build_query(
             [
