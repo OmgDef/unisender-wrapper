@@ -30,6 +30,6 @@ Once the extension is installed, simply use it in your code by  :
 ```php
 $obj = new \omgdef\unisender\UniSenderWrapper();
 $obj->testMode = true;
-$obj->apiKey = 'some_key_jere';
+$obj->apiKey = 'some_key_here';
 $response = $obj->sendSms(['phone' => '123123123', 'text' => 'text']);
 ```
