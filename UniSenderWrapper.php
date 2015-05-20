@@ -112,7 +112,6 @@ class UniSenderWrapper
         } while ($result === false && $retryCount < $this->retryCount);
 
         curl_close($ch);
-        var_dump($result);
         return $result !== false ? json_decode($result, true) : null;
     }
 
