@@ -80,7 +80,7 @@ class UniSenderWrapper
         }
 
         $params['api_key'] = $this->apiKey;
-        $body = http_build_query($params);Re
+        $body = http_build_query($params);
 
         $getParams = http_build_query(
             [
