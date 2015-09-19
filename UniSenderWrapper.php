@@ -61,7 +61,31 @@ class UniSenderWrapper
     public function sendSms($params)
     {
         $params['sender'] = $this->senderName ?: $this->senderPhone;
+
         return $this->sendQuery('sendSms', $params);
+    }
+
+    /**
+     * Подписывает email на рассылку
+     *
+     * @param string $list_ids Перечисленные через запятую коды списков, в которые надо добавить подписчика. Коды можно узнать с помощью методаgetLists. Они совпадают с кодами, используемыми в форме подписки.
+     * @param array $fields Ассоциативный массив дополнительных полей. Обязательно должно присутствовать хотя бы поле «email» или «phone», иначе метод возвратит ошибку.
+     * В случае наличия и e-mail, и телефона, подписчик будет включён и в e-mail, и в SMS списки рассылки.
+     * @param array $params Остальные необязательные параметры. Больше информации http://www.unisender.com/ru/help/api/subscribe/
+     * @throws \Exception
+     * @return array
+     */
+    public function subscribe($list_ids, array $fields, $params = [])
+    {
+        $params['list_ids'] = $list_ids;
+
+        if(empty($fields["email"]) && empty($fields["phone"])){
+            throw new \Exception('email or phone keys are required in array $fields');
+        }
+
+        $params['fields'] = $fields;
+
+        return $this->sendQuery('subscribe', $params);
     }
 
     /**
@@ -73,9 +97,9 @@ class UniSenderWrapper
     {
         if ($this->encoding != 'UTF8') {
             if (function_exists('iconv')) {
-                array_walk_recursive($params, array($this, 'iconv'));
+                array_walk_recursive($params, [$this, 'iconv']);
             } else if (function_exists('mb_convert_encoding')) {
-                array_walk_recursive($params, array($this, 'mb_convert_encoding'));
+                array_walk_recursive($params, [$this, 'mb_convert_encoding']);
             }
         }
 
@@ -103,6 +127,7 @@ class UniSenderWrapper
         } while ($result === false && $retryCount < $this->retryCount);
 
         curl_close($ch);
+
         return $result !== false ? json_decode($result, true) : null;
     }
 
