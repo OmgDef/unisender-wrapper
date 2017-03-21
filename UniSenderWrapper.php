@@ -93,7 +93,7 @@ class UniSenderWrapper
      * @param array $params
      * @return array
      */
-    protected function sendQuery($methodName, array $params = [])
+    public function sendQuery($methodName, array $params = [])
     {
         if ($this->encoding != 'UTF8') {
             if (function_exists('iconv')) {
