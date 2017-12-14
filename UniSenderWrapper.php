@@ -3,41 +3,8 @@
 namespace omgdef\unisender;
 
 
-class UniSenderWrapper
+class UniSenderWrapper extends BaseUniSenderWrapper
 {
-    /**
-     * @var string API key
-     */
-    public $apiKey = '';
-    /**
-     * @var string sender phone number
-     */
-    public $senderPhone = '+380999999999';
-    /**
-     * @var string sender name for sms
-     */
-    public $senderName = 'Hamster';
-    /**
-     * @var string email sender
-     */
-    public $senderEmail = 'xxxxxx@gmail.com';
-    /**
-     * @var boolean enable test mode
-     */
-    public $testMode = false;
-    /**
-     * @var string
-     */
-    public $encoding = 'UTF8';
-    /**
-     * @var float request timeout
-     */
-    public $timeout = 10;
-    /**
-     * @var int
-     */
-    public $retryCount = 0;
-
     /**
      * @param string $name
      * @param array $arguments
@@ -79,7 +46,7 @@ class UniSenderWrapper
     {
         $params['list_ids'] = $list_ids;
 
-        if(empty($fields["email"]) && empty($fields["phone"])){
+        if (empty($fields["email"]) && empty($fields["phone"])) {
             throw new \Exception('email or phone keys are required in array $fields');
         }
 
@@ -95,14 +62,7 @@ class UniSenderWrapper
      */
     public function sendQuery($methodName, array $params = [])
     {
-        if ($this->encoding != 'UTF8') {
-            if (function_exists('iconv')) {
-                array_walk_recursive($params, [$this, 'iconv']);
-            } else if (function_exists('mb_convert_encoding')) {
-                array_walk_recursive($params, [$this, 'mb_convert_encoding']);
-            }
-        }
-
+        $this->convertParamsEncoding($params);
         $params['api_key'] = $this->apiKey;
         $body = http_build_query($params);
 
@@ -121,7 +81,7 @@ class UniSenderWrapper
 
         $retryCount = 0;
         do {
-            curl_setopt($ch, CURLOPT_URL, $this->getApiHost($retryCount) . $methodName . '?' . $getParams);
+            curl_setopt($ch, CURLOPT_URL, $this->getApiHost() . $methodName . '?' . $getParams);
             $result = curl_exec($ch);
             $retryCount++;
         } while ($result === false && $retryCount < $this->retryCount);
@@ -132,33 +92,10 @@ class UniSenderWrapper
     }
 
     /**
-     * @param int $retryCount
-     * @return string
+     * @inheritdoc
      */
-    protected function getApiHost($retryCount = 0)
+    protected function getApiHost()
     {
-        if ($retryCount % 2 == 0) {
-            return 'https://api.unisender.com/ru/api/';
-        } else {
-            return 'https://www.api.unisender.com/ru/api/';
-        }
-    }
-
-    /**
-     * @param string $value
-     * @param string $key
-     */
-    protected function iconv(&$value, $key)
-    {
-        $value = iconv($this->encoding, 'UTF8//IGNORE', $value);
-    }
-
-    /**
-     * @param string $value
-     * @param string $key
-     */
-    protected function mb_convert_encoding(&$value, $key)
-    {
-        $value = mb_convert_encoding($value, 'UTF8', $this->encoding);
+        return parent::getApiHost() . "api/";
     }
 }
