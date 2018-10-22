@@ -147,4 +147,12 @@ class UniOneWrapper extends BaseUniSenderWrapper
 
         return $result !== false ? json_decode($result, true) : null;
     }
+    
+    /**
+     * @return string
+     */
+    protected function getApiHost()
+    {
+        return "https://one.unisender.com/{$this->language}/";
+    }
 }
