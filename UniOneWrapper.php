@@ -134,6 +134,7 @@ class UniOneWrapper extends BaseUniSenderWrapper
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->timeout ?: 10);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout ?: 10);
 
         $retryCount = 0;
